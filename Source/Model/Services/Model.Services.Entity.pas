@@ -56,7 +56,7 @@ begin
   if not Assigned(FData) then
     FData := T.Create;
 
-  Result := FData
+  Result := FData;
 end;
 
 procedure TEntity<T>.ExecuteDML(_ADMLOperation: TDMLOperation);
@@ -86,7 +86,8 @@ end;
 
 function TEntity<T>.Insert: IEntity<T>;
 begin
-  ExecuteDML(dmlInsert)
+  ExecuteDML(dmlInsert);
+  Result := Self;
 end;
 
 function TEntity<T>.ListActions: IEntityList<T>;
@@ -97,6 +98,7 @@ end;
 function TEntity<T>.LoadFrom(_AEntityData: T): IEntity<T>;
 begin
   FData:= _AEntityData;
+  Result := Self;
 end;
 
 procedure TEntity<T>.DoAfterDML(_AOperation: TDMLOperation; _SQLStatment: String);
@@ -113,7 +115,7 @@ end;
 
 function TEntity<T>.Update: IEntity<T>;
 begin
-  ExecuteDML(dmlDelete);
+  ExecuteDML(dmlUpdate);
   Result := Self
 end;
 

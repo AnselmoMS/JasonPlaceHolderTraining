@@ -20,9 +20,8 @@ type
   TPostEntity = class(TEntity<TPost>, ILoggerEntity<TPostEntity>, IDBEntity<TPostEntity>)
   private
    var
-    FConnection: IConnectorDB;
-    FLogger: ILogger;
     FParent: IServices;
+  protected
   public
     class function New(_AParent: IServices): TPostEntity;
     constructor Create(_AParent: IServices);

@@ -10,21 +10,26 @@ uses
   Model.SQL.Interfaces,
   Model.Connections.Interfaces,
   Model.Logger.Interfaces,
-  Model.Services.Entity;
+  Model.Services.Entity,
+  Model.Services.Post.DataModule;
 
 type
   TEntityList<T: class, constructor> = class(TInterfacedObject, IEntityList<T>)
   private
     FList: TList<T>;
+    FDMEntityQuery: TdmEntityQuery;
     procedure ExecuteDMLToList(_Operation: TDMLOperation);
   protected
     FConnection: IConnectorDB;
     FLogger: ILogger;
+    function GetSQLBuilder(_AItem: T): ISQL<T>;
+    function GetEntityName: string; virtual; abstract;
   public
     constructor Create;
     //
     function DeleteAll: IEntityList<T>;
     function GetDataSet: TDataSet;
+    function GetDataSource: TDataSource;
     function InsertAll: IEntityList<T>;
     function LoadFromList(_SourceList: TList<T>): IEntityList<T>;
     function SelectAll: IEntityList<T>;
@@ -34,11 +39,13 @@ type
 implementation
 
 uses
-  System.SysUtils;
+  System.SysUtils, Model.SQL.Generic, Winapi.Windows;
 
 constructor TEntityList<T>.Create;
 begin
   FList := TList<T>.Create;
+
+  FDMEntityQuery := TdmEntityQuery.Create(nil);
 end;
 
 function TEntityList<T>.DeleteAll: IEntityList<T>;
@@ -50,6 +57,8 @@ end;
 procedure TEntityList<T>.ExecuteDMLToList(_Operation: TDMLOperation);
 var
   aSQLStatment : string;
+  aItem: T;
+  aEntityItem: IEntity<T>;
 begin
   try
     if not Assigned(FConnection) then
@@ -57,8 +66,14 @@ begin
 
     FConnection.StartTransaction;
 
-//    aSQLStatment := GetSQLBuilder.GetDML(_Operation);
-    FConnection.ExecSQL(aSQLStatment);
+    aEntityItem := TEntity<T>.New;
+    for aItem in FList do
+    begin
+      aEntityItem.LoadFrom(aItem);
+      aSQLStatment := GetSQLBuilder(aItem).GetDML(_Operation);
+      OutputDebugString(PChar(aSQLStatment));
+      FConnection.ExecSQL(aSQLStatment);
+    end;
 
     FConnection.Commit;
   except
@@ -69,7 +84,17 @@ end;
 
 function TEntityList<T>.GetDataSet: TDataSet;
 begin
+  Result := FDMEntityQuery.GetDataSet
+end;
 
+function TEntityList<T>.GetDataSource: TDataSource;
+begin
+  Result := FDMEntityQuery.GetDataSource
+end;
+
+function TEntityList<T>.GetSQLBuilder(_AItem: T): ISQL<T>;
+begin
+  Result := TSQLGeneric<T>.New(_AItem);
 end;
 
 function TEntityList<T>.InsertAll: IEntityList<T>;
@@ -82,11 +107,17 @@ function TEntityList<T>.LoadFromList(_SourceList: TList<T>): IEntityList<T>;
 begin
   FList.Clear;
   FList.AddRange(_SourceList.ToArray);
+  Result := Self;
 end;
 
 function TEntityList<T>.SelectAll: IEntityList<T>;
 begin
-  //select from DataModule
+  FDMEntityQuery.SetConnection(FConnection.Component);
+  FDMEntityQuery.CloseQuery;
+  FDMEntityQuery.EntityName := GetEntityName;
+  FDMEntityQuery.OpenQuery;
+
+  //OutputDebugString(Pchar(GetDataSet.RecordCount));
   Result := Self;
 end;
 

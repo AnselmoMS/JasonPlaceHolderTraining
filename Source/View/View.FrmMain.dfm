@@ -78,6 +78,7 @@ object Form1: TForm1
     Top = 8
     Width = 465
     Height = 257
+    DataSource = dsList
     TabOrder = 2
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText
@@ -90,7 +91,7 @@ object Form1: TForm1
     Top = 279
     Width = 169
     Height = 42
-    Caption = 'List Posts'
+    Caption = 'Listar todos'
     TabOrder = 3
     OnClick = btnListPostsClick
   end
@@ -143,11 +144,11 @@ object Form1: TForm1
     OnClick = btSaveClick
   end
   object btShow: TButton
-    Left = 679
-    Top = 279
-    Width = 97
+    Left = 800
+    Top = 340
+    Width = 169
     Height = 42
-    Caption = 'Save'
+    Caption = 'Carregar registro selecionado'
     TabOrder = 10
     OnClick = btShowClick
   end
@@ -179,7 +180,7 @@ object Form1: TForm1
     TabOrder = 13
   end
   object dsList: TDataSource
-    Left = 528
-    Top = 280
+    Left = 520
+    Top = 40
   end
 end

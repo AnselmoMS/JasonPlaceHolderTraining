@@ -40,7 +40,8 @@ uses
   Model.SQL.RTTI in 'Source\Model\SQL\Model.SQL.RTTI.pas',
   Model.SQL.RTTI.StringUtils in 'Source\Model\SQL\Model.SQL.RTTI.StringUtils.pas',
   Model.SQL.RTTI.Types in 'Source\Model\SQL\Model.SQL.RTTI.Types.pas',
-  Model.SQL.Types in 'Source\Model\SQL\Model.SQL.Types.pas';
+  Model.SQL.Types in 'Source\Model\SQL\Model.SQL.Types.pas',
+  Model.Services.Post.DataModule in 'Source\Model\Services\Model.Services.Post.DataModule.pas' {dmEntityQuery: TDataModule};
 
 {$R *.res}
 

@@ -132,8 +132,6 @@ begin
 end;
 
 procedure TForm1.btnImportDataClick(Sender: TObject);
-var
-  aPostE: IEntityList<TPost>;
 begin
   FController
     .Services
@@ -145,12 +143,13 @@ end;
 
 procedure TForm1.btnListPostsClick(Sender: TObject);
 begin
-  dsList.dataset:= FController
-                      .Services
-                        .Post
-                          .ListActions
-                            .SelectAll //it can delay
-                            .GetDataSet;
+  dbgrdPostList.DataSource
+    := FController
+        .Services
+          .Post
+            .ListActions
+              .SelectAll //it can delay
+              .GetDataSource;
 end;
 
 procedure TForm1.btnLoadFromFileClick(Sender: TObject);
@@ -168,12 +167,11 @@ procedure TForm1.btSaveClick(Sender: TObject);
 var
   aPost: TPost;
 begin
-  aPost:= GetPostFromControls;
   try
-    State.Save(FController, aPost);
+    State.Save(FController, GetPostFromControls);
     State := dsBrowse;
   finally
-    aPost.Free;
+    //aPost;
   end;
 end;
 
@@ -183,9 +181,10 @@ var
 begin
   APost := TPostAdapter
              .FromJson(
-                        dsList
-                          .dataset
-                            .ToJSONObject()
+                        dbgrdPostList
+                          .DataSource
+                            .dataset
+                              .ToJSONObject()
                         );
   try
     FillControls(APost);
@@ -278,7 +277,8 @@ end;
 procedure TForm1.SetState(const Value: TdatasetState);
 begin
   FState := Value;
-  FState.SetStateControls(FController);
+  //UpdateRecordControlState;
+  //FState.SetStateControls(FController);
 end;
 
 { TPostCollectionAdapter }

@@ -141,6 +141,11 @@
         <DCCReference Include="Source\Model\SQL\Model.SQL.RTTI.StringUtils.pas"/>
         <DCCReference Include="Source\Model\SQL\Model.SQL.RTTI.Types.pas"/>
         <DCCReference Include="Source\Model\SQL\Model.SQL.Types.pas"/>
+        <DCCReference Include="Source\Model\Services\Model.Services.Post.DataModule.pas">
+            <Form>dmEntityQuery</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

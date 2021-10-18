@@ -15,9 +15,7 @@ type
   TController = class(TInterfacedObject, IController)
   private
     FProvider : IProvider<IController>;
-    [weak]
     FServices : IServices;
-    [weak]
     FValidator: IValidator;
   public
     function Provider: IProvider<IController>;

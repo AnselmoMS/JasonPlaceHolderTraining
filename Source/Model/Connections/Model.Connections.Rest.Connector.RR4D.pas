@@ -11,8 +11,6 @@ uses
    TConnectorRestRR4D = class(TRestConnector)
    private
    public
-     constructor Create;
-     //
      class function New: IRestConnector;
      //
      function ExecuteGet: IRestConnector; override;

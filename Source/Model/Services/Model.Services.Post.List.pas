@@ -14,8 +14,7 @@ uses
 type
   TPostListEntity = class(TEntityList<TPost>, IDBEntity<TPostListEntity>, ILoggerEntity<TPostListEntity>)
   protected
-    FLogger: ILogger;
-    FConnection: IConnectorDB;
+     function GetEntityName: string; override;
   public
     class function New: TPostListEntity;
     //IDBEntity
@@ -25,6 +24,11 @@ type
   end;
 
 implementation
+
+function TPostListEntity.GetEntityName: string;
+begin
+  Result := 'post' { TODO -oansel -c : Get from TPost 17/10/2021 23:36:11 }
+end;
 
 class function TPostListEntity.New: TPostListEntity;
 begin

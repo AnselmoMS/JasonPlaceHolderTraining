@@ -51,9 +51,9 @@ end;
 function TSQLGeneric<T>.GetDML(_Operation: TDMLOperation): string;
 begin
   case _Operation of
-    dmlInsert: TSQLRTTI.GetInsertSQL<T>(FEntity);
-    dmlUpdate: TSQLRTTI.GetUpdateSQL<T>(FEntity);
-    dmlDelete: TSQLRTTI.GetDeleteSQL<T>(FEntity);
+    dmlInsert: Result := TSQLRTTI.GetInsertSQL<T>(FEntity);
+    dmlUpdate: Result := TSQLRTTI.GetUpdateSQL<T>(FEntity);
+    dmlDelete: Result := TSQLRTTI.GetDeleteSQL<T>(FEntity);
   end;
 end;
 

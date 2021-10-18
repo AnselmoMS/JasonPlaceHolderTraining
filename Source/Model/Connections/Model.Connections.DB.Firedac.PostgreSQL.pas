@@ -40,13 +40,14 @@ type
       //
       class function NewInstance: TObject; override;
       class function GetInstance: IConnectorDB;
-      function StartTransaction: IConnectorDB;
       function Commit: IConnectorDB;
+      function Component: TComponent;
       function ExecSQL(_SQL: String): IConnectorDB;
       function InTransaction: Boolean;
       function DisConnect: IConnectorDB;
       function Connect: IConnectorDB;
       function Rollback: IConnectorDB;
+      function StartTransaction: IConnectorDB;
       function WithComponent(_AComponent: TComponent): IConnectorDB;
   end;
 
@@ -58,6 +59,11 @@ function TConnectorDBFiredacPostgreSQL.Commit: IConnectorDB;
 begin
   FDConnection.Commit;
   Result := Self;
+end;
+
+function TConnectorDBFiredacPostgreSQL.Component: TComponent;
+begin
+  Result := FDConnection
 end;
 
 class procedure TConnectorDBFiredacPostgreSQL.ConfigureObjects;
