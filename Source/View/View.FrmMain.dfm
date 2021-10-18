@@ -3,7 +3,7 @@ object Form1: TForm1
   Top = 0
   Caption = 'Form1'
   ClientHeight = 660
-  ClientWidth = 996
+  ClientWidth = 980
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -56,26 +56,26 @@ object Form1: TForm1
     ParentFont = False
   end
   object btnImportData: TButton
-    Left = 312
-    Top = 271
-    Width = 169
-    Height = 57
+    Left = 239
+    Top = 136
+    Width = 242
+    Height = 51
     Caption = 'Save Posts to DB'
     TabOrder = 0
     OnClick = btnImportDataClick
   end
   object btnDownloadPosts: TButton
-    Left = 8
+    Left = 24
     Top = 8
-    Width = 139
+    Width = 201
     Height = 50
     Caption = 'Download Posts'
     TabOrder = 1
     OnClick = btnDownloadPostsClick
   end
   object dbgrdPostList: TDBGrid
-    Left = 504
-    Top = 8
+    Left = 507
+    Top = 77
     Width = 465
     Height = 257
     DataSource = dsList
@@ -87,19 +87,19 @@ object Form1: TForm1
     TitleFont.Style = []
   end
   object btnListPosts: TButton
-    Left = 800
-    Top = 279
-    Width = 169
+    Left = 507
+    Top = 29
+    Width = 465
     Height = 42
-    Caption = 'Listar todos'
+    Caption = 'Listar todos os registros do banco'
     TabOrder = 3
     OnClick = btnListPostsClick
   end
   object Memo1: TMemo
     Left = 24
-    Top = 353
+    Top = 193
     Width = 457
-    Height = 288
+    Height = 128
     TabOrder = 4
   end
   object edtTitle: TEdit
@@ -107,6 +107,7 @@ object Form1: TForm1
     Top = 424
     Width = 441
     Height = 21
+    Enabled = False
     TabOrder = 5
   end
   object memBody: TMemo
@@ -114,6 +115,7 @@ object Form1: TForm1
     Top = 464
     Width = 441
     Height = 89
+    Enabled = False
     TabOrder = 6
   end
   object btDelete: TButton
@@ -122,6 +124,7 @@ object Form1: TForm1
     Width = 106
     Height = 57
     Caption = 'Delete'
+    Enabled = False
     TabOrder = 7
     OnClick = btDeleteClick
   end
@@ -131,6 +134,7 @@ object Form1: TForm1
     Width = 89
     Height = 57
     Caption = 'Edit'
+    Enabled = False
     TabOrder = 8
     OnClick = btEditClick
   end
@@ -140,11 +144,12 @@ object Form1: TForm1
     Width = 97
     Height = 57
     Caption = 'Save'
+    Enabled = False
     TabOrder = 9
     OnClick = btSaveClick
   end
   object btShow: TButton
-    Left = 800
+    Left = 803
     Top = 340
     Width = 169
     Height = 42
@@ -153,34 +158,25 @@ object Form1: TForm1
     OnClick = btShowClick
   end
   object btnLoadFromFile: TButton
-    Left = 160
+    Left = 239
     Top = 8
-    Width = 139
+    Width = 242
     Height = 50
     Caption = 'Load From File'
     TabOrder = 11
     OnClick = btnLoadFromFileClick
   end
-  object btnLoadListObject: TButton
-    Left = 312
-    Top = 8
-    Width = 139
-    Height = 50
-    Caption = 'Load list object from text'
-    TabOrder = 12
-    OnClick = btnLoadListObjectClick
-  end
-  object Panel1: TPanel
+  object btnClearDBPosts: TButton
     Left = 24
-    Top = 184
-    Width = 275
-    Height = 144
-    Caption = 'Panel1'
-    ShowCaption = False
-    TabOrder = 13
+    Top = 136
+    Width = 201
+    Height = 51
+    Caption = 'Apagar registros do banco'
+    TabOrder = 12
+    OnClick = btnClearDBPostsClick
   end
   object dsList: TDataSource
-    Left = 520
-    Top = 40
+    Left = 512
+    Top = 104
   end
 end

@@ -21,7 +21,8 @@ uses
   FireDAC.Comp.UI,
   FireDAC.Phys.PG,
   Data.DB,
-  FireDAC.Comp.Client;
+  FireDAC.Comp.Client,
+  Model.Logger.Interfaces;
 
 type
   TConnectorDBFiredacPostgreSQL = class(TInterfacedObject, IConnectorDB)
@@ -34,7 +35,10 @@ type
       class procedure FreeObjects;
       class procedure CreateObjects;
       class procedure ConfigureObjects;
+      procedure DoAfterExecSQL(_SQL: string);
       //constructor Create;
+    protected
+      FLogger: ILogger; { TODO -oansel -c : Move to base class 17/10/2021 00:27:27 }
     public
       destructor Destroy; override;
       //
@@ -49,6 +53,7 @@ type
       function Rollback: IConnectorDB;
       function StartTransaction: IConnectorDB;
       function WithComponent(_AComponent: TComponent): IConnectorDB;
+      function WithLogger(_ALogger: ILogger): IConnectorDB;
   end;
 
 implementation
@@ -117,9 +122,16 @@ begin
   FDConnection.Connected := False
 end;
 
+procedure TConnectorDBFiredacPostgreSQL.DoAfterExecSQL(_SQL: string);
+begin
+  if not _SQL.StartsWith('INSERT INTO') then  //improve operation detection and make configurable
+    FLogger.AddLog(FormatDateTime('dd/mm/YYYY HH:MM:SS ', Now()) + ' >> ' + _SQL);
+end;
+
 function TConnectorDBFiredacPostgreSQL.ExecSQL(_SQL: String): IConnectorDB;
 begin
   FDConnection.ExecSQL(_SQL);
+  DoAfterExecSQL(_SQL);
   Result := Self;
 end;
 
@@ -168,6 +180,12 @@ end;
 function TConnectorDBFiredacPostgreSQL.WithComponent(_AComponent: TComponent): IConnectorDB;
 begin
   FDConnection := TFDConnection(_AComponent);
+  Result := Self;
+end;
+
+function TConnectorDBFiredacPostgreSQL.WithLogger(_ALogger: ILogger): IConnectorDB;
+begin
+  FLogger := _ALogger;
   Result := Self;
 end;
 

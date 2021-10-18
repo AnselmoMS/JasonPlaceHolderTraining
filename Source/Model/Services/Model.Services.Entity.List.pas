@@ -16,6 +16,9 @@ uses
 type
   TEntityList<T: class, constructor> = class(TInterfacedObject, IEntityList<T>)
   private
+    const
+      DML_TO_LOG = [dmlUpdate, dmlDelete];
+    var
     FList: TList<T>;
     FDMEntityQuery: TdmEntityQuery;
     procedure ExecuteDMLToList(_Operation: TDMLOperation);
@@ -24,6 +27,7 @@ type
     FLogger: ILogger;
     function GetSQLBuilder(_AItem: T): ISQL<T>;
     function GetEntityName: string; virtual; abstract;
+    procedure DoAfterDML(_AOperation: TDMLOperation; _SQLStatment: String);
   public
     constructor Create;
     //
@@ -54,6 +58,15 @@ begin
   Result := Self;
 end;
 
+procedure TEntityList<T>.DoAfterDML(_AOperation: TDMLOperation; _SQLStatment: String);
+begin
+  if Assigned(FLogger) then
+    if _AOperation in DML_TO_LOG then
+      FLogger.AddLog(DML_OPERATION_DESC[_AOperation] + ' >> ' + _SQLStatment);
+
+  OutputDebugString(PChar(_SQLStatment));
+end;
+
 procedure TEntityList<T>.ExecuteDMLToList(_Operation: TDMLOperation);
 var
   aSQLStatment : string;
@@ -71,7 +84,7 @@ begin
     begin
       aEntityItem.LoadFrom(aItem);
       aSQLStatment := GetSQLBuilder(aItem).GetDML(_Operation);
-      OutputDebugString(PChar(aSQLStatment));
+
       FConnection.ExecSQL(aSQLStatment);
     end;
 

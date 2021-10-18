@@ -27,16 +27,16 @@ class function TServicesPostFactory.NewPost(_AParent: IServices): IEntity<TPost>
 begin
   Result := TPostEntity
               .New(_AParent)
-                .WithConnection(TConnectorDBFiredacPostgreSQL.GetInstance)
-                .WithLogger(TLogger.GetInstance)
+                .WithConnection(TConnectorDBFiredacPostgreSQL.GetInstance.WithLogger(TLogger.GetInstance))
+                //.WithLogger(TLogger.GetInstance)
                 .WithListActions( NewPostList(_AParent) );
 end;
 
 class function TServicesPostFactory.NewPostList(_AParent: IServices): IEntityList<TPost>;
 begin
   Result := TPostListEntity.New
-              .WithConnection(TConnectorDBFiredacPostgreSQL.GetInstance)
-              .WithLogger(TLogger.GetInstance);
+              .WithConnection(TConnectorDBFiredacPostgreSQL.GetInstance.WithLogger(TLogger.GetInstance))
+              //.WithLogger(TLogger.GetInstance);
 end;
 
 end.

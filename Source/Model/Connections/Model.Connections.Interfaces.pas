@@ -5,7 +5,8 @@ interface
 uses
   System.JSON,
   System.SysUtils,
-  System.Classes;
+  System.Classes,
+  Model.Logger.Interfaces;
 
 type
   IConnector = interface {Rest, DataBase, ...}
@@ -16,13 +17,14 @@ type
   ['{6081AF0F-0068-4C93-AF3C-D943D72C99D5}']
   function Commit: IConnectorDB;
   function Component: TComponent;
+  function Connect: IConnectorDB;
+  function DisConnect: IConnectorDB;
   function ExecSQL(_SQL: string): IConnectorDB;
   function InTransaction: Boolean;
-  function DisConnect: IConnectorDB;
-  function Connect: IConnectorDB;
   function Rollback: IConnectorDB;
   function StartTransaction: IConnectorDB;
   function WithComponent(_AComponent: TComponent): IConnectorDB;
+  function WithLogger(_ALogger: ILogger): IConnectorDB;
   end;
 
 implementation

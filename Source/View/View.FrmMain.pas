@@ -44,8 +44,7 @@ type
     lblTitleError: TLabel;
     lblBodyError: TLabel;
     btnLoadFromFile: TButton;
-    btnLoadListObject: TButton;
-    Panel1: TPanel;
+    btnClearDBPosts: TButton;
     procedure FormCreate(Sender: TObject);
     procedure btnDownloadPostsClick(Sender: TObject);
     procedure btnImportDataClick(Sender: TObject);
@@ -56,7 +55,7 @@ type
     procedure btEditClick(Sender: TObject);
     procedure btSaveClick(Sender: TObject);
     procedure btnLoadFromFileClick(Sender: TObject);
-    procedure btnLoadListObjectClick(Sender: TObject);
+    procedure btnClearDBPostsClick(Sender: TObject);
   private
     FState : TDataSetState;
     FController: IController;
@@ -70,6 +69,7 @@ type
     procedure ConfigureStateControl;
     procedure SetState(const Value: TdatasetState);
     procedure LocalLog(_AText: string);
+    procedure UpdateRecordControlState;
   public
     { Public declarations }
     property State: TdatasetState read FState write SetState;
@@ -100,27 +100,30 @@ type
 {$R *.dfm}
 
 procedure TForm1.btDeleteClick(Sender: TObject);
-var
-  aPost: TPost;
 begin
-  aPost:= GetPostFromControls;
-  try
-    FController
-      .Services
-        .Post
-          .LoadFrom(APost)
-        .Delete
-        //.AfterDelete(SetBrowseState) //To-Do
-        ;
-    State := dsBrowse;
-  finally
-    aPost.Free;
-  end;
+  FController
+    .Services
+      .Post
+        .LoadFrom(GetPostFromControls)
+      .Delete
+      //.AfterDelete(SetBrowseState) //To-Do
+      ;
+  State := dsBrowse;
 end;
 
 procedure TForm1.btEditClick(Sender: TObject);
 begin
   State := dsEdit;
+end;
+
+procedure TForm1.btnClearDBPostsClick(Sender: TObject);
+begin
+  FController
+    .Services
+      .Post
+        .ListActions
+          .LoadFromList(FResultList)
+            .DeleteAll;
 end;
 
 procedure TForm1.btnDownloadPostsClick(Sender: TObject);
@@ -148,7 +151,7 @@ begin
         .Services
           .Post
             .ListActions
-              .SelectAll //it can delay
+              .SelectAll
               .GetDataSource;
 end;
 
@@ -156,11 +159,8 @@ procedure TForm1.btnLoadFromFileClick(Sender: TObject);
 begin
   FJsonFileString:= TJSONObject.ParseJSONValue(TFile.ReadAllText('posts.json'));
   LocalLog('Arquivo json carregado!');
-end;
-
-procedure TForm1.btnLoadListObjectClick(Sender: TObject);
-begin
   LoadPostObjectList(FJsonFileString);
+  LocalLog('Objetos carregados!');
 end;
 
 procedure TForm1.btSaveClick(Sender: TObject);
@@ -188,6 +188,7 @@ begin
                         );
   try
     FillControls(APost);
+    State := dsBrowse
   finally
     APost.Free;
   end;
@@ -277,8 +278,18 @@ end;
 procedure TForm1.SetState(const Value: TdatasetState);
 begin
   FState := Value;
-  //UpdateRecordControlState;
+  UpdateRecordControlState;
   //FState.SetStateControls(FController);
+end;
+
+procedure TForm1.UpdateRecordControlState;
+begin
+  btDelete.Enabled := (State = dsBrowse);
+  btEdit.Enabled := (State = dsBrowse);
+  btSave.Enabled := (State = dsBrowse) or (State = dsEdit);
+  //
+  edtTitle.Enabled := btSave.Enabled;
+  memBody.Enabled := btSave.Enabled;
 end;
 
 { TPostCollectionAdapter }
