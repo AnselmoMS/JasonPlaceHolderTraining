@@ -6,15 +6,11 @@ uses
   Model.Provider.Post.Interfaces;
 
 type
-  TProvider<T> = class(TInterfacedObject, IProvider<T>)
+  TProvider = class(TInterfacedObject, IProvider)
   private
-    FParent: T;
-    FPosts: IProviderPosts<T>;
+    FPosts: IProviderPosts;
   public
-    constructor Create(_AParent: T);
-    //
-    function Parent: T;
-    function Posts: IProviderPosts<T>;
+    function Posts: IProviderPosts;
   end;
 
 implementation
@@ -22,20 +18,10 @@ implementation
 uses
   Model.Provider.Post;
 
-constructor TProvider<T>.Create(_AParent: T);
-begin
-  FParent:= _AParent
-end;
-
-function TProvider<T>.Parent: T;
-begin
-  Result := FParent
-end;
-
-function TProvider<T>.Posts: IProviderPosts<T>;
+function TProvider.Posts: IProviderPosts;
 begin
   if not Assigned(FPosts) then
-    FPosts:= TProviderPosts<T>.Create(FParent);
+    FPosts:= TProviderPosts.Create;
 
   Result := FPosts
 end;

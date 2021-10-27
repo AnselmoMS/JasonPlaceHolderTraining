@@ -19,19 +19,23 @@ type
     const
       DML_TO_LOG = [dmlUpdate, dmlDelete];
     var
-    FList: TList<T>;
-    FDMEntityQuery: TdmEntityQuery;
     procedure ExecuteDMLToList(_Operation: TDMLOperation);
   protected
+  var
+    FDMEntityQuery: TdmEntityQuery;
+    FList: TList<T>;
     FConnection: IConnectorDB;
     FLogger: ILogger;
     function GetSQLBuilder(_AItem: T): ISQL<T>;
     function GetEntityName: string; virtual; abstract;
     procedure DoAfterDML(_AOperation: TDMLOperation; _SQLStatment: String);
+    procedure DoAfterSelect;
+    procedure LoadListFromDataSetResult;
   public
     constructor Create;
     //
     function DeleteAll: IEntityList<T>;
+    function GetDataList: TList<T>;
     function GetDataSet: TDataSet;
     function GetDataSource: TDataSource;
     function InsertAll: IEntityList<T>;
@@ -43,7 +47,11 @@ type
 implementation
 
 uses
-  System.SysUtils, Model.SQL.Generic, Winapi.Windows;
+  System.SysUtils,
+  Model.SQL.Generic,
+  Winapi.Windows,
+  System.JSON,
+  REST.Json;
 
 constructor TEntityList<T>.Create;
 begin
@@ -65,6 +73,11 @@ begin
       FLogger.AddLog(DML_OPERATION_DESC[_AOperation] + ' >> ' + _SQLStatment);
 
   OutputDebugString(PChar(_SQLStatment));
+end;
+
+procedure TEntityList<T>.DoAfterSelect;
+begin
+  LoadListFromDataSetResult
 end;
 
 procedure TEntityList<T>.ExecuteDMLToList(_Operation: TDMLOperation);
@@ -95,6 +108,12 @@ begin
   end;
 end;
 
+function TEntityList<T>.GetDataList: TList<T>;
+begin
+  Result := TList<T>.Create;
+  Result.AddRange(FList.ToArray);
+end;
+
 function TEntityList<T>.GetDataSet: TDataSet;
 begin
   Result := FDMEntityQuery.GetDataSet
@@ -123,14 +142,33 @@ begin
   Result := Self;
 end;
 
+procedure TEntityList<T>.LoadListFromDataSetResult;
+var
+  jsArray: TJSONArray;
+  jsItem: TJsonValue;
+  aItem: T;
+begin
+  FList.Clear;
+  if FDMEntityQuery.GetDataSet.RecordCount = 0 then
+    Exit;
+
+  jsArray := FDMEntityQuery.GetDataSetAsJson;
+
+  for jsItem in jsArray do
+  begin
+    aItem := TJson.JsonToObject<T>(jsItem.ToJSON);
+    FList.Add(aItem);
+  end;
+end;
+
 function TEntityList<T>.SelectAll: IEntityList<T>;
 begin
   FDMEntityQuery.SetConnection(FConnection.Component);
   FDMEntityQuery.CloseQuery;
   FDMEntityQuery.EntityName := GetEntityName;
   FDMEntityQuery.OpenQuery;
-
   //OutputDebugString(Pchar(GetDataSet.RecordCount));
+  DoAfterSelect;
   Result := Self;
 end;
 

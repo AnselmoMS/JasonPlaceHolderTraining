@@ -102,7 +102,6 @@
         <DCCReference Include="Source\Model\Provider\Model.Provider.pas"/>
         <DCCReference Include="Source\Model\Provider\Model.Provider.Post.Interfaces.pas"/>
         <DCCReference Include="Source\Model\Services\Model.Services.Post.Factory.pas"/>
-        <DCCReference Include="Source\Model\Provider\Model.Provider.Post.Factory.pas"/>
         <DCCReference Include="Source\Model\Connections\Model.Connections.DB.Firedac.PostgreSQL.pas"/>
         <DCCReference Include="Source\Model\POCO\Model.POCO.Post.pas"/>
         <DCCReference Include="Source\Model\Services\Model.Services.Interfaces.pas"/>
@@ -113,7 +112,6 @@
         <DCCReference Include="Source\Model\Utils\Model.Utils.StringHelper.pas"/>
         <DCCReference Include="Source\Model\Connections\Model.Connections.Rest.Connector.pas"/>
         <DCCReference Include="Source\Model\Connections\Model.Connections.Rest.Provider.pas"/>
-        <DCCReference Include="Source\Model\Connections\Model.Connections.Rest.Connector.RR4D.pas"/>
         <DCCReference Include="Source\Model\Connections\Model.Connections.Rest.Interfaces.pas"/>
         <DCCReference Include="Source\View\View.FrmMain.pas">
             <Form>Form1</Form>
@@ -146,6 +144,7 @@
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
+        <DCCReference Include="Source\Model\Connections\Model.Connections.Rest.Connector.Native.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

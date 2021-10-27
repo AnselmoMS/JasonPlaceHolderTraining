@@ -25,6 +25,7 @@ type
   IEntityList<T: class> = interface //T is a POCO Class
     ['{96125D08-8D94-45BF-9597-711944188BF6}']
     function GetDataSet: TDataSet;
+    function GetDataList: TList<T>;
     function GetDataSource: TDataSource;
     function SelectAll: IEntityList<T>;
     function LoadFromList(_SourceList: TList<T>): IEntityList<T>;

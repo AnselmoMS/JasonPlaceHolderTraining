@@ -14,11 +14,11 @@ uses
 type
   TController = class(TInterfacedObject, IController)
   private
-    FProvider : IProvider<IController>;
+    FProvider : IProvider;
     FServices : IServices;
     FValidator: IValidator;
   public
-    function Provider: IProvider<IController>;
+    function Provider: IProvider;
     function Services: IServices;
     function Validator: IValidator;
     class function New: IController;
@@ -33,10 +33,10 @@ begin
   Result := Self.Create
 end;
 
-function TController.Provider: IProvider<IController>;
+function TController.Provider: IProvider;
 begin
   if not Assigned(FProvider) then
-    FProvider := TProvider<IController>.Create(Self);
+    FProvider := TProvider.Create;
   Result := FProvider;
 end;
 

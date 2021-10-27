@@ -5,7 +5,6 @@ uses
   Model.Provider in 'Source\Model\Provider\Model.Provider.pas',
   Model.Provider.Post.Interfaces in 'Source\Model\Provider\Model.Provider.Post.Interfaces.pas',
   Model.Services.Post.Factory in 'Source\Model\Services\Model.Services.Post.Factory.pas',
-  Model.Provider.Post.Factory in 'Source\Model\Provider\Model.Provider.Post.Factory.pas',
   Model.Connections.DB.Firedac.PostgreSQL in 'Source\Model\Connections\Model.Connections.DB.Firedac.PostgreSQL.pas',
   Model.POCO.Post in 'Source\Model\POCO\Model.POCO.Post.pas',
   Model.Services.Interfaces in 'Source\Model\Services\Model.Services.Interfaces.pas',
@@ -16,7 +15,6 @@ uses
   Model.Utils.StringHelper in 'Source\Model\Utils\Model.Utils.StringHelper.pas',
   Model.Connections.Rest.Connector in 'Source\Model\Connections\Model.Connections.Rest.Connector.pas',
   Model.Connections.Rest.Provider in 'Source\Model\Connections\Model.Connections.Rest.Provider.pas',
-  Model.Connections.Rest.Connector.RR4D in 'Source\Model\Connections\Model.Connections.Rest.Connector.RR4D.pas',
   Model.Connections.Rest.Interfaces in 'Source\Model\Connections\Model.Connections.Rest.Interfaces.pas',
   View.FrmMain in 'Source\View\View.FrmMain.pas' {Form1},
   Controller.Interfaces in 'Source\Controller\Controller.Interfaces.pas',
@@ -41,7 +39,8 @@ uses
   Model.SQL.RTTI.StringUtils in 'Source\Model\SQL\Model.SQL.RTTI.StringUtils.pas',
   Model.SQL.RTTI.Types in 'Source\Model\SQL\Model.SQL.RTTI.Types.pas',
   Model.SQL.Types in 'Source\Model\SQL\Model.SQL.Types.pas',
-  Model.Services.Post.DataModule in 'Source\Model\Services\Model.Services.Post.DataModule.pas' {dmEntityQuery: TDataModule};
+  Model.Services.Post.DataModule in 'Source\Model\Services\Model.Services.Post.DataModule.pas' {dmEntityQuery: TDataModule},
+  Model.Connections.Rest.Connector.Native in 'Source\Model\Connections\Model.Connections.Rest.Connector.Native.pas';
 
 {$R *.res}
 

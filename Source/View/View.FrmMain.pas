@@ -23,14 +23,11 @@ uses
   Controller.Interfaces,
   Model.POCO.Post,
   System.Generics.Collections,
-  Vcl.ExtCtrls;
+  Vcl.ExtCtrls, Vcl.ComCtrls;
 
 type
   TForm1 = class(TForm)
-    btnImportData: TButton;
-    btnDownloadPosts: TButton;
     dbgrdPostList: TDBGrid;
-    btnListPosts: TButton;
     dsList: TDataSource;
     Memo1: TMemo;
     edtTitle: TEdit;
@@ -43,8 +40,12 @@ type
     btShow: TButton;
     lblTitleError: TLabel;
     lblBodyError: TLabel;
-    btnLoadFromFile: TButton;
+    btnListPosts: TButton;
     btnClearDBPosts: TButton;
+    btnDownloadPosts: TButton;
+    btnImportData: TButton;
+    btnLoadFromFile: TButton;
+    Label1: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure btnDownloadPostsClick(Sender: TObject);
     procedure btnImportDataClick(Sender: TObject);
@@ -83,7 +84,8 @@ uses
   DataSet.Serialize,
   Model.Connections.Rest.Interfaces,
 
-  IOUtils, Model.Services.Post, Model.Services.Entity.Interfaces;
+  IOUtils, Model.Services.Post, Model.Services.Entity.Interfaces,
+  Model.Services.Entity.List;
 
 type
   TPostAdapter = class
@@ -117,13 +119,24 @@ begin
 end;
 
 procedure TForm1.btnClearDBPostsClick(Sender: TObject);
+var
+  FDeleteList: TList<TPost>;
 begin
+  FDeleteList :=
+    FController
+      .Services
+        .Post
+          .ListActions
+            .SelectAll
+              .GetDataList;
+   LocalLog('Objetos carregados!');
   FController
     .Services
       .Post
         .ListActions
-          .LoadFromList(FResultList)
+          .LoadFromList(FDeleteList)
             .DeleteAll;
+  LocalLog('Todos os registros deletados!');
 end;
 
 procedure TForm1.btnDownloadPostsClick(Sender: TObject);
@@ -211,13 +224,13 @@ begin
       .Posts
         .OnAfterGet(LoadPostObjectList);
 
-  ConfigureValidators;
+  //ConfigureValidators;
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
 begin
-  if FResultList <> nil then
-    FResultList.Free
+//  if FResultList <> nil then
+//    FResultList.Free
 end;
 
 function TForm1.GetPostFromControls: TPost;
@@ -305,7 +318,7 @@ var
   jsItem: TJsonValue;
   aPost: TPost;
 begin
-  Result := TObjectList<TPost>.Create;
+  Result := TList<TPost>.Create;
 
   jsArray := _ResponseJson as TJSONArray;
 
